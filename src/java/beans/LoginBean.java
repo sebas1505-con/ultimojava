@@ -1,5 +1,6 @@
 package beans;
 
+import dao.LoginDAO;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
@@ -8,7 +9,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import modelo.Usuario;
-import dao.UsuarioDAO;
 
 @ManagedBean(name="loginBean")
 @SessionScoped
@@ -19,6 +19,7 @@ public class LoginBean implements Serializable {
     private String clave;
     private Usuario usuarioLogueado;
 
+    // --- GETTERS & SETTERS ---
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
@@ -30,32 +31,31 @@ public class LoginBean implements Serializable {
     // ------------------ INICIAR SESIÓN ------------------
     public String iniciarSesion() {
         try {
-            UsuarioDAO dao = new UsuarioDAO();
-            usuarioLogueado = dao.login(correo, clave);
+            LoginDAO loginDao = new LoginDAO();
+            usuarioLogueado = loginDao.login(correo, clave);
 
             if (usuarioLogueado != null) {
                 HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
                         .getExternalContext().getSession(true);
-
                 session.setAttribute("usuario", usuarioLogueado);
 
-                // 🚀 Redirección según rol
+                // Redirigir según rol
                 if ("admin".equalsIgnoreCase(usuarioLogueado.getRol())) {
-                    return "/admin/admin.xhtml?faces-redirect=true";
-                } else if ("cliente".equalsIgnoreCase(usuarioLogueado.getRol())) {
-                    return "/usuario.xhtml?faces-redirect=true"; // ✅ ahora en la raíz
+                    return "/administrador.xhtml?faces-redirect=true";
                 } else {
-                    return "/sinacceso.xhtml?faces-redirect=true";
+                    return "/usuario.xhtml?faces-redirect=true";
                 }
-
-            } else {
-                FacesMessage msg = new FacesMessage("Datos incorrectos");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                return null;
             }
+
+            // Si no encontró nada
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Datos incorrectos"));
+            return null;
 
         } catch (Exception e) {
             e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Problema al iniciar sesión"));
             return null;
         }
     }
@@ -71,11 +71,26 @@ public class LoginBean implements Serializable {
     }
 
     // ------------------ VERIFICAR SESIÓN ------------------
-    public void verif_sesion(String rol) {
+    public void verifSesionUsuario() {
         FacesContext context = FacesContext.getCurrentInstance();
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
-        if (usuario == null || !usuario.getRol().equalsIgnoreCase(rol)) {
+        if (usuario == null || "admin".equalsIgnoreCase(usuario.getRol())) {
+            try {
+                context.getExternalContext().redirect(
+                    context.getExternalContext().getRequestContextPath() + "/sinacceso.xhtml"
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void verifSesionAdmin() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+
+        if (usuario == null || !"admin".equalsIgnoreCase(usuario.getRol())) {
             try {
                 context.getExternalContext().redirect(
                     context.getExternalContext().getRequestContextPath() + "/sinacceso.xhtml"

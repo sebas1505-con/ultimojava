@@ -129,4 +129,43 @@ public class UsuarioDAO {
         }
         return u;
     }
+
+public List<Usuario> listarUsuarios() {
+    List<Usuario> lista = new ArrayList<>();
+    try {
+        PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Usuario u = new Usuario();
+            u.setId(rs.getInt("pk_idusuario"));
+            u.setNombre(rs.getString("nombre"));
+            u.setUsuCorreo(rs.getString("usuCorreo"));
+            u.setUsuario(rs.getString("usuario"));
+            u.setClave(rs.getString("clave"));
+            u.setUsuTelefono(rs.getString("usutelefono"));
+            u.setDireccion(rs.getString("direccion"));
+            u.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+            u.setBarrio(rs.getString("barrio"));
+            u.setRol(rs.getString("rol"));
+            lista.add(u);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return lista;
+}
+
+    public int obtenerUltimoId() {
+    try {
+        PreparedStatement ps = con.prepareStatement("SELECT MAX(pk_idusuario) FROM usuario");
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }

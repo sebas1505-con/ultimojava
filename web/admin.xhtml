@@ -5,10 +5,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<f:metadata>
-    <f:event type="preRenderView" listener="#{loginBean.verif_sesion('admin')}" />
-</f:metadata>
-
 <h:head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -19,18 +15,23 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{loginBean.verifSesionAdmin}" />
+
 <header class="header">
     <h1>Panel de Administrador - Deportes 360</h1>
 </header>
 
 <nav class="sidebar">
-    <ul>
-        <li><h:link outcome="pedidos" value="Pedidos"/></li>
-        <li><h:link outcome="productos" value="Productos"/></li>
-        <li><h:link outcome="inventario" value="Inventario"/></li>
-        <li><h:link outcome="nuevoproducto" value="Nuevo Producto"/></li>
-        <li><h:commandLink value="Cerrar sesión" action="#{loginBean.cerrarSesion}" /></li>
-    </ul>
+   <ul>
+    <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <li><h:link outcome="productos" value="Productos"/></li>
+    <li><h:link outcome="inventario" value="Inventario"/></li>
+    <li><h:link outcome="/productos/nuevo" value="Nuevo Producto"/></li>
+    <li><h:link outcome="/productos/editar" value="editar Producto"/></li>
+    <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <li><h:link outcome="login" value="Cerrar Sesión" /></li>
+</ul>
+
 </nav>
 
 <main class="dashboard">

@@ -1,27 +1,31 @@
-
 package modelo;
 
+import java.util.Date;
 
 public class Producto {
-    private int idProducto;
-    private String nomProducto;
-    private String tallaProducto;
-    private double precioProducto;
-    private String categoria;
+    private String cod;
+    private String nombre;
+    private String descr;
+    private int exist;
+    private double precio;
+    private Date fven;
 
     // Getters y setters
-    public int getIdProducto() { return idProducto; }
-    public void setIdProducto(int idProducto) { this.idProducto = idProducto; }
+    public String getCod() { return cod; }
+    public void setCod(String cod) { this.cod = cod; }
 
-    public String getNomProducto() { return nomProducto; }
-    public void setNomProducto(String nomProducto) { this.nomProducto = nomProducto; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getTallaProducto() { return tallaProducto; }
-    public void setTallaProducto(String tallaProducto) { this.tallaProducto = tallaProducto; }
+    public String getDescr() { return descr; }
+    public void setDescr(String descr) { this.descr = descr; }
 
-    public double getPrecioProducto() { return precioProducto; }
-    public void setPrecioProducto(double precioProducto) { this.precioProducto = precioProducto; }
+    public int getExist() { return exist; }
+    public void setExist(int exist) { this.exist = exist; }
 
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public double getPrecio() { return precio; }
+    public void setPrecio(double precio) { this.precio = precio; }
+
+    public Date getFven() { return fven; }
+    public void setFven(Date fven) { this.fven = fven; }
 }

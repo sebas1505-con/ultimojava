@@ -13,28 +13,26 @@ import modelo.Producto;
 @SessionScoped
 public class ProductoBean implements Serializable {
     private List<Producto> listaProd;
+    private Producto producto;   // 👈 nuevo atributo
+    private String imagen;       // 👈 para el inputFile
 
     public ProductoBean() {
         listaProd = new ArrayList<>();
-
-        Producto p1 = new Producto();
-        p1.setIdProducto(1);
-        p1.setNomProducto("Camiseta Deportiva");
-        p1.setTallaProducto("M");
-        p1.setPrecioProducto(59900);
-        p1.setCategoria("Ropa");
-        listaProd.add(p1);
-
-        Producto p2 = new Producto();
-        p2.setIdProducto(2);
-        p2.setNomProducto("Zapatos Running");
-        p2.setTallaProducto("42");
-        p2.setPrecioProducto(199900);
-        p2.setCategoria("Calzado");
-        listaProd.add(p2);
+        producto = new Producto(); // inicializar para el formulario
     }
 
     public List<Producto> getListaProd() { return listaProd; }
     public void setListaProd(List<Producto> listaProd) { this.listaProd = listaProd; }
-}
 
+    public Producto getProducto() { return producto; }
+    public void setProducto(Producto producto) { this.producto = producto; }
+
+    public String getImagen() { return imagen; }
+    public void setImagen(String imagen) { this.imagen = imagen; }
+
+    // Método para guardar
+    public void guardar() {
+        listaProd.add(producto);
+        producto = new Producto(); // reiniciar para el siguiente
+    }
+}

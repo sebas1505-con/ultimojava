@@ -1,94 +1,93 @@
 package beans;
 
-import java.io.IOException;
-import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import modelo.Usuario;
-import dao.UsuarioDAO;
+import java.io.Serializable;
 
-@ManagedBean(name = "adminBean")
+import dao.AdministradorDAO;
+import modelo.Administrador;
+
+@ManagedBean(name="adminBean")
 @SessionScoped
 public class AdminBean implements Serializable {
+    private Administrador administrador = new Administrador();   
+    private Administrador administradorLogueado;                
+    private String contrasenaConfirmacion;                       
 
-    private static final long serialVersionUID = 1L;
+    // --- GETTERS & SETTERS ---
+    public Administrador getAdministrador() { return administrador; }
+    public void setAdministrador(Administrador administrador) { this.administrador = administrador; }
 
-    private String correo;
-    private String password;
+    public Administrador getAdministradorLogueado() { return administradorLogueado; }
+    public void setAdministradorLogueado(Administrador administradorLogueado) { this.administradorLogueado = administradorLogueado; }
 
-    private Usuario adminLogueado;
+    public String getContrasenaConfirmacion() { return contrasenaConfirmacion; }
+    public void setContrasenaConfirmacion(String contrasenaConfirmacion) { this.contrasenaConfirmacion = contrasenaConfirmacion; }
 
-    // ------------------ LOGIN ------------------
-    public String login() {
+    // --- REGISTRAR ---
+    public String registrar() {
+        if (!administrador.getContraseña().equals(contrasenaConfirmacion)) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                                 "Error", "Las contraseñas no coinciden"));
+            return null;
+        }
         try {
-            UsuarioDAO dao = new UsuarioDAO();
-            adminLogueado = dao.login(correo, password);
+            AdministradorDAO dao = new AdministradorDAO();
+            boolean guardado = dao.registrar(administrador);
 
-            if (adminLogueado != null) {
-                // Redirecciona al panel de administración
-                return "/admin/admin?faces-redirect=true";
-            } else {
-                // Mensaje de error si usuario o contraseña incorrectos
+            if (guardado) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Datos incorrectos", "Usuario o contraseña inválidos"));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                                     "Éxito", "Administrador registrado correctamente"));
+
+                administrador = new Administrador();
+                contrasenaConfirmacion = null;
+
+                return "/login.xhtml?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                                     "Error", "No se pudo registrar en la base de datos"));
                 return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Error", "No se pudo iniciar sesión"));
+                new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                                 "Error", "Ocurrió un problema en el registro"));
             return null;
         }
     }
 
-    // ------------------ VERIFICAR SESIÓN ------------------
-    public void verificarSesion() {
+    // --- LOGIN ---
+    public String iniciarSesion() {
         try {
-            if (adminLogueado == null) {
-                FacesContext.getCurrentInstance().getExternalContext()
-                        .redirect("../login.xhtml");
+            AdministradorDAO dao = new AdministradorDAO();
+            administradorLogueado = dao.login(administrador.getUsuario(), administrador.getContraseña());
+
+            if (administradorLogueado != null) {
+                return "/admin/dashboard.xhtml?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                                     "Error", "Usuario o contraseña incorrectos"));
+                return null;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                                 "Error", "Ocurrió un problema al iniciar sesión"));
+            return null;
         }
     }
 
-    // ------------------ LOGOUT ------------------
-    public String logout() {
-        adminLogueado = null;
-        correo = null;
-        password = null;
-        // Redirige al login y finaliza la sesión
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    // --- CERRAR SESIÓN ---
+    public String cerrarSesion() {
+        administradorLogueado = null;
         return "/login.xhtml?faces-redirect=true";
-    }
-
-    // ------------------ GETTERS & SETTERS ------------------
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Usuario getAdminLogueado() {
-        return adminLogueado;
-    }
-
-    public void setAdminLogueado(Usuario adminLogueado) {
-        this.adminLogueado = adminLogueado;
     }
 }
