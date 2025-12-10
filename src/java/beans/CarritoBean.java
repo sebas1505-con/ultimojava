@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import modelo.Usuario; // importa tu clase Usuario
 
 @ManagedBean(name = "carritoBean")
 @SessionScoped
@@ -15,37 +16,46 @@ public class CarritoBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Producto> productos = new ArrayList<>();
     private String tallaSeleccionada;
-    
+
+    // Nuevo: cliente asociado al carrito
+    private Usuario cliente;
     
     public CarritoBean() {
         System.out.println(">>> CarritoBean CARGADO CORRECTAMENTE <<<");
     }
-    
-    
-    public class Producto implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String nombre;
-    private int precio;
-    private String imagen;
-    private String talla;
-    
-    public Producto(String nombre, int precio, String imagen, String talla) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.imagen = imagen;
-        this.talla = talla;
-    }
-    
-    public String getNombre() { return nombre; }
-    public int getPrecio() { return precio; }
-    public String getImagen() { return imagen; }
-    public String getTalla() { return talla; }
-}
 
-    
-    
-    public String agregarProducto(String nombre, int precio, String imagen) {
+    // --- Cliente ---
+    public Usuario getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
+
+    // --- Clase interna Producto ---
+    public class Producto implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private String nombre;
+        private int precio;
+        private String imagen;
+        private String talla;
         
+        public Producto(String nombre, int precio, String imagen, String talla) {
+            this.nombre = nombre;
+            this.precio = precio;
+            this.imagen = imagen;
+            this.talla = talla;
+        }
+        
+        public String getNombre() { return nombre; }
+        public int getPrecio() { return precio; }
+        public String getImagen() { return imagen; }
+        public String getTalla() { return talla; }
+    }
+
+    // --- Métodos del carrito ---
+    public String agregarProducto(String nombre, int precio, String imagen) {
         if (tallaSeleccionada == null || tallaSeleccionada.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_WARN, 
@@ -53,22 +63,17 @@ public class CarritoBean implements Serializable {
             return null; 
         }
         
-        
         productos.add(new Producto(nombre, precio, imagen, tallaSeleccionada));
         System.out.println("Producto agregado al carrito: " + nombre + " - Talla: " + tallaSeleccionada);
-        
         
         FacesContext.getCurrentInstance().addMessage(null, 
             new FacesMessage(FacesMessage.SEVERITY_INFO, 
             "Éxito", "Producto agregado al carrito"));
         
-        
         tallaSeleccionada = null;
-        
         
         return "carrito?faces-redirect=true";
     }
-    
     
     public void eliminar(int index) {
         if (index >= 0 && index < productos.size()) {
@@ -81,7 +86,6 @@ public class CarritoBean implements Serializable {
         }
     }
     
-    
     public void vaciar() {
         productos.clear();
         System.out.println("Carrito vaciado");
@@ -91,7 +95,6 @@ public class CarritoBean implements Serializable {
             "Carrito vaciado", "Todos los productos han sido eliminados"));
     }
     
-    
     public int getTotal() {
         int total = 0;
         for (Producto p : productos) {
@@ -99,7 +102,6 @@ public class CarritoBean implements Serializable {
         }
         return total;
     }
-    
     
     public List<Producto> getProductos() {
         return productos;
@@ -113,11 +115,9 @@ public class CarritoBean implements Serializable {
         this.tallaSeleccionada = tallaSeleccionada;
     }
     
-    
     public int getCantidadProductos() {
         return productos.size();
     }
-    
     
     public boolean isCarritoVacio() {
         return productos.isEmpty();

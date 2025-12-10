@@ -2,12 +2,17 @@ package beans;
 
 import java.util.List;
 import java.util.ArrayList;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import dao.AdministradorDAO;
+import dao.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import modelo.Pedido;
 import modelo.Producto;
 import modelo.Usuario;
@@ -16,11 +21,32 @@ import modelo.Administrador;
 @ManagedBean(name="adminBean")
 @SessionScoped
 public class AdminBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    // --- Administrador ---
     private Administrador administrador = new Administrador();   
     private Administrador administradorLogueado;                
-    private String contrasenaConfirmacion;                       
+    private String contrasenaConfirmacion;   
 
-    // --- GETTERS & SETTERS ---
+    // --- Listas ---
+    private List<Usuario> usuarios;
+    private List<Pedido> ultimosPedidos;
+    private List<Producto> inventario;
+
+    // --- Estadísticas ---
+    private int ventasHoy;
+    private int productosVendidosHoy;
+    private int clientesNuevosHoy;
+
+    // ================== CICLO DE VIDA ==================
+    @PostConstruct
+    public void init() {
+        usuarios = cargarUsuarios();
+        // Aquí también podrías inicializar inventario y pedidos si tienes DAOs
+        System.out.println("Usuarios cargados: " + (usuarios != null ? usuarios.size() : 0));
+    }
+
+    // ================== GETTERS & SETTERS ==================
     public Administrador getAdministrador() { return administrador; }
     public void setAdministrador(Administrador administrador) { this.administrador = administrador; }
 
@@ -30,12 +56,36 @@ public class AdminBean implements Serializable {
     public String getContrasenaConfirmacion() { return contrasenaConfirmacion; }
     public void setContrasenaConfirmacion(String contrasenaConfirmacion) { this.contrasenaConfirmacion = contrasenaConfirmacion; }
 
+    public List<Usuario> getUsuarios() {
+        if (usuarios == null || usuarios.isEmpty()) {
+            usuarios = cargarUsuarios();
+        }
+        return usuarios;
+    }
+    public void setUsuarios(List<Usuario> usuarios) { this.usuarios = usuarios; }
+
+    public int getVentasHoy() { return ventasHoy; }
+    public void setVentasHoy(int ventasHoy) { this.ventasHoy = ventasHoy; }
+
+    public int getProductosVendidosHoy() { return productosVendidosHoy; }
+    public void setProductosVendidosHoy(int productosVendidosHoy) { this.productosVendidosHoy = productosVendidosHoy; }
+
+    public int getClientesNuevosHoy() { return clientesNuevosHoy; }
+    public void setClientesNuevosHoy(int clientesNuevosHoy) { this.clientesNuevosHoy = clientesNuevosHoy; }
+
+    public List<Pedido> getUltimosPedidos() { return ultimosPedidos; }
+    public void setUltimosPedidos(List<Pedido> ultimosPedidos) { this.ultimosPedidos = ultimosPedidos; }
+
+    public List<Producto> getInventario() { return inventario; }
+    public void setInventario(List<Producto> inventario) { this.inventario = inventario; }
+
+    // ================== MÉTODOS ==================
+
     // --- REGISTRAR ---
     public String registrar() {
         if (!administrador.getContraseña().equals(contrasenaConfirmacion)) {
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                 "Error", "Las contraseñas no coinciden"));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Las contraseñas no coinciden"));
             return null;
         }
         try {
@@ -44,8 +94,7 @@ public class AdminBean implements Serializable {
 
             if (guardado) {
                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                                     "Éxito", "Administrador registrado correctamente"));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Administrador registrado correctamente"));
 
                 administrador = new Administrador();
                 contrasenaConfirmacion = null;
@@ -53,15 +102,13 @@ public class AdminBean implements Serializable {
                 return "/login.xhtml?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                     "Error", "No se pudo registrar en la base de datos"));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo registrar en la base de datos"));
                 return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                                 "Error", "Ocurrió un problema en el registro"));
+                new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Ocurrió un problema en el registro"));
             return null;
         }
     }
@@ -76,15 +123,13 @@ public class AdminBean implements Serializable {
                 return "/admin/dashboard.xhtml?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                     "Error", "Usuario o contraseña incorrectos"));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña incorrectos"));
                 return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                                 "Error", "Ocurrió un problema al iniciar sesión"));
+                new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Ocurrió un problema al iniciar sesión"));
             return null;
         }
     }
@@ -94,66 +139,83 @@ public class AdminBean implements Serializable {
         administradorLogueado = null;
         return "/login.xhtml?faces-redirect=true";
     }
+
+    // --- CARGAR USUARIOS ---
+    private List<Usuario> cargarUsuarios() {
+        List<Usuario> lista = new ArrayList<>();
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(
+                 "SELECT pk_idusuario, nombre, usuCorreo, rol FROM usuario")) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("pk_idusuario"));
+                u.setNombre(rs.getString("nombre"));
+                u.setUsuCorreo(rs.getString("usuCorreo"));
+                u.setRol(rs.getString("rol"));
+                lista.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
     
-    private int ventasHoy;
+    public void eliminarUsuario(Usuario usuario) {
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(
+             "DELETE FROM usuario WHERE pk_idusuario=?")) {
+        ps.setInt(1, usuario.getId());
+        int filas = ps.executeUpdate();
 
-public int getVentasHoy() {
-    return ventasHoy;
+        if (filas > 0) {
+            // Actualizar la lista en memoria
+            usuarios.remove(usuario);
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                 "Éxito", "Usuario eliminado correctamente"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                 "Aviso", "No se encontró el usuario"));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        FacesContext.getCurrentInstance().addMessage(null,
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                             "Error", "Ocurrió un problema al eliminar"));
+    }
+}
+private List<Integer> ventasSemana;
+
+public List<Integer> getVentasSemana() {
+    if (ventasSemana == null || ventasSemana.isEmpty()) {
+        ventasSemana = cargarVentasSemana();
+    }
+    return ventasSemana;
 }
 
-public void setVentasHoy(int ventasHoy) {
-    this.ventasHoy = ventasHoy;
+public String getVentasSemanaJson() {
+    return getVentasSemana().toString(); // devuelve "[1000,2000,3000]"
 }
 
-private int productosVendidosHoy;
-
-public int getProductosVendidosHoy() {
-    return productosVendidosHoy;
+private List<Integer> cargarVentasSemana() {
+    List<Integer> lista = new ArrayList<>();
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(
+             "SELECT SUM(total) as totalDia " +
+             "FROM ventas " +
+             "WHERE WEEK(fecha) = WEEK(CURDATE()) " +
+             "GROUP BY DAYOFWEEK(fecha) " +
+             "ORDER BY DAYOFWEEK(fecha)")) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            lista.add(rs.getInt("totalDia"));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return lista;
 }
 
-public void setProductosVendidosHoy(int productosVendidosHoy) {
-    this.productosVendidosHoy = productosVendidosHoy;
 }
-
-private int clientesNuevosHoy;
-
-public int getClientesNuevosHoy() {
-    return clientesNuevosHoy;
-}
-
-public void setClientesNuevosHoy(int clientesNuevosHoy) {
-    this.clientesNuevosHoy = clientesNuevosHoy;
-}
-
-private List<Pedido> ultimosPedidos;
-
-public List<Pedido> getUltimosPedidos() {
-    return ultimosPedidos;
-}
-
-public void setUltimosPedidos(List<Pedido> ultimosPedidos) {
-    this.ultimosPedidos = ultimosPedidos;
-}
-
-private List<Producto> inventario;
-
-public List<Producto> getInventario() {
-    return inventario;
-}
-
-public void setInventario(List<Producto> inventario) {
-    this.inventario = inventario;
-}
-
-private List<Usuario> usuarios;
-
-public List<Usuario> getUsuarios() {
-    return usuarios;
-}
-
-public void setUsuarios(List<Usuario> usuarios) {
-    this.usuarios = usuarios;
-}
-    
-}
-

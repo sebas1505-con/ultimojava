@@ -22,42 +22,59 @@
         <h2>📝 Finalizar compra</h2>
 
         <h:form id="formCompra">
-           <label for="cantProducto">Cantidad de productos:</label>
-<h:inputText id="cantProducto"
-             value="#{ventaBean.cantProducto}"
-             readonly="true">
-    <f:convertNumber integerOnly="true" />
-</h:inputText>
+    <label for="cantProducto">Cantidad de productos:</label>
+    <h:inputText id="cantProducto"
+                 value="#{ventaBean.cantProducto}"
+                 readonly="true">
+        <f:convertNumber integerOnly="true" />
+    </h:inputText>
 
-            <label for="metodoEnvio">Método de envío:</label>
-            <h:selectOneMenu id="metodoEnvio"
-                             value="#{ventaBean.metodoEnvio}"
-                             required="true">
-                <f:selectItem itemValue="domicilio" itemLabel="Domicilio" />
-            </h:selectOneMenu>
+    <label for="metodoEnvio">Método de envío:</label>
+    <h:selectOneMenu id="metodoEnvio"
+                     value="#{ventaBean.metodoEnvio}"
+                     required="true">
+        <f:selectItem itemValue="domicilio" itemLabel="Domicilio" />
+    </h:selectOneMenu>
 
-            
-<label for="totalVenta">Total de la venta:</label>
-<h:inputText id="totalVenta"
-             value="#{ventaBean.totalVenta}"
-             readonly="true">
-    <f:convertNumber />
-</h:inputText>
+    <label for="totalVenta">Total de la venta:</label>
+    <h:inputText id="totalVenta"
+                 value="#{ventaBean.totalVenta}"
+                 readonly="true">
+        <f:convertNumber />
+    </h:inputText>
 
-            <label for="metodoPago">Método de pago:</label>
-            <h:selectOneMenu id="metodoPago"
-                             value="#{ventaBean.metodoPago}"
-                             required="true">
-                <f:selectItem itemValue="" itemLabel="Seleccionar..." />
-                <f:selectItem itemValue="efectivo" itemLabel="Efectivo" />
-                <f:selectItem itemValue="tarjeta" itemLabel="Tarjeta" />
-                <f:selectItem itemValue="transferencia" itemLabel="Transferencia" />
-            </h:selectOneMenu>
+    <label for="metodoPago">Método de pago:</label>
+    <h:selectOneMenu id="metodoPago"
+                     value="#{ventaBean.metodoPago}"
+                     required="true">
+        <f:selectItem itemValue="" itemLabel="Seleccionar..." />
+        <f:selectItem itemValue="efectivo" itemLabel="Efectivo" />
+        <f:selectItem itemValue="tarjeta" itemLabel="Tarjeta" />
+        <f:selectItem itemValue="transferencia" itemLabel="Transferencia" />
+    </h:selectOneMenu>
 
-            <h:commandButton value="Confirmar compra"
-                             action="#{ventaBean.guardarVenta}" />
+    <!-- 🔹 Nuevos campos -->
+    <label for="direccionEnvio">Dirección de envío:</label>
+    <h:inputText id="direccionEnvio"
+                 value="#{ventaBean.direccionEnvio}"
+                 required="true" />
 
-        </h:form>
+    <label for="telefonoContacto">Teléfono de contacto:</label>
+    <h:inputText id="telefonoContacto"
+                 value="#{ventaBean.telefonoContacto}"
+                 required="true" />
+
+    <label for="observaciones">Observaciones:</label>
+    <h:inputTextarea id="observaciones"
+                     value="#{ventaBean.observaciones}"
+                     rows="3" cols="30" />
+
+    <h:commandButton value="Confirmar compra"
+                     action="#{ventaBean.guardarVenta}" />
+    <h:messages globalOnly="true" layout="table" />
+
+</h:form>
+
     </div>
     <a href="carrito.xhtml" class="btn-volver-home">Volver</a>
 

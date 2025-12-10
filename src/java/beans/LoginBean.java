@@ -1,10 +1,12 @@
 package beans;
 
 import dao.LoginDAO;
+import dao.UsuarioDAO;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -39,9 +41,16 @@ public class LoginBean implements Serializable {
                         .getExternalContext().getSession(true);
                 session.setAttribute("usuario", usuarioLogueado);
 
+                // 🔹 Asignar el cliente al carrito
+                if (carritoBean != null) {
+                    carritoBean.setCliente(usuarioLogueado);
+                }
+
                 // Redirigir según rol
                 if ("admin".equalsIgnoreCase(usuarioLogueado.getRol())) {
                     return "/admin?faces-redirect=true";
+                } else if ("repartidor".equalsIgnoreCase(usuarioLogueado.getRol())) {
+                    return "/repartidor?faces-redirect=true";
                 } else {
                     return "/usuario?faces-redirect=true";
                 }
@@ -100,4 +109,48 @@ public class LoginBean implements Serializable {
             }
         }
     }
+
+    public void verifSesionRepartidor() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+
+        if (usuario == null || !"repartidor".equalsIgnoreCase(usuario.getRol())) {
+            try {
+                context.getExternalContext().redirect(
+                    context.getExternalContext().getRequestContextPath() + "/sinacceso.xhtml"
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // ------------------ INTEGRACIÓN CON CARRITO ------------------
+    @ManagedProperty(value="#{carritoBean}")
+    private CarritoBean carritoBean;
+
+    public CarritoBean getCarritoBean() {
+        return carritoBean;
+    }
+
+    public void setCarritoBean(CarritoBean carritoBean) {
+        this.carritoBean = carritoBean;
+    }
+
+    // ------------------ LOGIN USANDO UsuarioDAO ------------------
+    public String login() {
+        Usuario u = UsuarioDAO.validarUsuario(correo, clave);
+        if (u != null) {
+            usuarioLogueado = u;
+            if (carritoBean != null) {
+                carritoBean.setCliente(usuarioLogueado); // 🔹 asigna el cliente al carrito
+            }
+            return "home?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Credenciales inválidas"));
+            return null;
+        }
+    }
 }
+
