@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Iniciar sesión</title>
+    <link rel="icon" type="image/x-icon" href="#{resource['images/Cuenta.png']}" />
+    <h:outputStylesheet name="login.css" library="css" />
+</h:head>
+
+<h:body>
+
+    <div class="login-container">
+
+        <div class="login-header">
+            <h:graphicImage name="Logo.png" library="images" styleClass="logo" />
+            <h2>Inicia sesión</h2>
+        </div>
+
+        <a href="index.xhtml" class="btn-volver-home">Volver</a>
+
+        <h:form styleClass="login-form">
+
+    <h:messages globalOnly="true" style="color: red; margin-bottom: 10px;" />
+
+    <h:outputLabel for="email" value="Correo electrónico:" />
+    <h:inputText id="email" value="#{loginBean.correo}" required="true" styleClass="input" />
+
+    <h:outputLabel for="password" value="Contraseña:" />
+    <h:inputSecret id="password" value="#{loginBean.clave}" required="true" styleClass="input" />
+
+    <h:commandButton value="Iniciar sesión"
+                     action="#{loginBean.iniciarSesion}"
+                     styleClass="btn-login" />
+
+    
+    <h:link outcome="menu" value="¿Quieres registrarte con nosotros?" styleClass="btn-volver" />
+</h:form>
+
+    </div>
+    
+</h:body>
+    
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Buzo Hombre - Deportes 360</title>
+    <h:outputLink value="#{resource['images/producto.png']}" rel="icon"/>
+    <h:outputStylesheet library="css" name="catalogo.css"/>
+    <h:outputStylesheet library="css" name="index.css" />
+</h:head>
+<h:body>
+<header class="header">
+    <div class="container menu">
+        <a href="#" class="logo">DEPORTES 360</a>
+       <nav class="navbar">
+    <ul>
+        <li><h:link outcome="/usuario" value="Inicio"/></li>
+        <li><h:link outcome="catalogo" value="Volver" styleClass="btn-1"/></li>
+        <li><h:link outcome="contacto1" value="Contacto"/></li>
+
+        <!-- Carrito correcto -->
+        <li><h:link outcome="carrito" value="Carrito (#{carritoBean.cantidadProductos})"/></li>
+    </ul>
+</nav>
+
+    </div>
+</header>
+
+<main class="container">
+    
+    <h:messages styleClass="mensajes" globalOnly="true" 
+                infoClass="mensaje-info" 
+                warnClass="mensaje-warn" 
+                errorClass="mensaje-error"/>
+    
+    <div class="producto-detalle">
+        
+        <div class="producto-galeria">
+            <div class="imagen-principal">
+                <h:graphicImage library="images" name="buzo-hombre.png" id="imagen-principal" 
+                                alt="Buzo Hombre Deportivo"/>
+            </div>
+        </div>
+        
+        <div class="producto-info">
+            <h2>Buzo Hombre Deportivo</h2>
+            <p>
+                Una comodidad para que puedas hacer ejercicios al máximo.
+                Material de alta calidad que se adapta a tu cuerpo.
+            </p>
+            <p><strong>Precio:</strong> $75.000</p>
+            
+            <ul class="caracteristicas">
+                <li>✨ Soporte medio-alto</li>
+                <li>💨 Material transpirable</li>
+                <li>📏 Tallas: S, M, L, XL</li>
+                <li>🎨 Color: Negro</li>
+            </ul>
+            
+            <div class="benefits-mini">
+                <span>🚚 Envío gratis</span>
+                <span>💳 Pago contra entrega</span>
+                <span>🛡️ Garantía oficial</span>
+            </div>
+            
+            <h:form id="formCompra">
+                
+                <div style="margin-top: 20px;">
+                    <label for="talla"><strong>Selecciona tu talla:</strong></label>
+                    <h:selectOneMenu id="talla" value="#{carritoBean.tallaSeleccionada}" 
+                                     required="false"
+                                     styleClass="select-talla">
+                        <f:selectItem itemValue="" itemLabel="-- Selecciona una talla --" />
+                        <f:selectItem itemValue="S" itemLabel="S - Small" />
+                        <f:selectItem itemValue="M" itemLabel="M - Medium" />
+                        <f:selectItem itemValue="L" itemLabel="L - Large" />
+                        <f:selectItem itemValue="XL" itemLabel="XL - Extra Large" />
+                    </h:selectOneMenu>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h:link outcome="catalogo" value="Volver" styleClass="btn-1"/>
+
+                    <!-- BOTÓN FUNCIONAL Y CORRECTO -->
+                    <h:commandButton value="Agregar al Carrito"
+                                     styleClass="btn-1"
+                                     action="#{carritoBean.agregarProducto('Buzo Hombre', 75000, 'buzo-hombre.png')}"/>
+                </div>
+                
+            </h:form>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript">
+    function cambiarImagen(url) {
+        var img = document.getElementById("imagen-principal");
+        if (img) {
+            img.src = url;
+        }
+    }
+</script>
+</h:body>
+</html>

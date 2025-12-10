@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recuperar Contraseña</title>
+        <link rel="icon" type="image/x-icon" href="#{resource['images/Cuenta.png']}" />
+
+    <h:outputStylesheet name="contra.css" library="css" />
+</h:head>
+
+<h:body>
+    <div class="recover-container">
+
+        <div class="recover-header">
+            <h:graphicImage name="Logo.png" library="images" styleClass="logo" />
+            <h2>Recuperar Contraseña</h2>
+        </div>
+
+      <h:form>
+    <h:outputLabel value="Correo electrónico:" for="correo"/>
+    <h:inputText id="correo" value="#{contraBean.correo}" required="true" />
+
+    <h:commandButton value="Enviar correo de confirmación"
+                     action="#{contraBean.enviarCorreoConfirmacion}" />
+
+    <h:outputText value="#{contraBean.mensaje}" style="color: green;" />
+</h:form>
+
+    </div>
+</h:body>
+</html>

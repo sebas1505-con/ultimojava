@@ -1,6 +1,7 @@
 package modelo;
 
 import java.util.Date;
+import java.sql.Timestamp;
 
 public class Usuario {
     private int id;
@@ -10,9 +11,11 @@ public class Usuario {
     private String clave;
     private String usutelefono;
     private String direccion;
-    private Date fechaNacimiento; // ✅ ahora es Date
+    private Date fechaNacimiento;
     private String barrio;
     private String rol;
+    private String resetToken;        // ✅ token para restablecer
+    private Timestamp tokenExpiracion; // ✅ expiración del token
 
     // Getters y setters
     public int getId() { return id; }
@@ -44,4 +47,15 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public String getResetToken() { return resetToken; }
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+
+    public Timestamp getTokenExpiracion() { return tokenExpiracion; }
+    public void setTokenExpiracion(Timestamp tokenExpiracion) { this.tokenExpiracion = tokenExpiracion; }
+
+    
+
 }
+
+

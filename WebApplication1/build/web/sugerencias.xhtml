@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Módulo de Sugerencias</title>
+    <h:outputStylesheet library="css" name="sugerencias.css" />
+</h:head>
+
+<h:body 
+    style="
+        background: url('#{resource['images/fondo.png']}') 
+        no-repeat center center fixed;
+        background-size: cover;">
+
+    <div class="contenedor-sugerencia">
+
+        <h1>Déjanos tu sugerencia</h1>
+        <p>Queremos mejorar. Cuéntanos qué opinas de nuestra página:</p>
+
+        <h:form>
+            <h:inputText 
+                value="#{sugerenciaBean.nombre}"
+                styleClass="input-text"
+                pt:placeholder="Tu nombre (opcional)" />
+            <h:inputTextarea 
+                value="#{sugerenciaBean.texto}"
+                required="true"
+                styleClass="textarea"
+                pt:placeholder="Escribe tu sugerencia aquí..." />
+            <h:commandButton 
+                value="Enviar sugerencia"
+                action="#{sugerenciaBean.guardar}"
+                styleClass="btn-enviar" />
+        </h:form>
+        <h:link outcome="usuario" value="Volver" styleClass="btn-volver-home" />
+    </div>
+</h:body>
+</html>
+

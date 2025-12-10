@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Conjunto Deportivo Mujer - Deportes 360</title>
+    <link rel="icon" type="image/x-icon" href="resources/images/producto.png"/>
+    <h:outputStylesheet library="css" name="catalogo.css"/>
+    <h:outputStylesheet library="css" name="index.css"/>
+</h:head>
+<h:body>
+<header class="header">
+    <div class="container menu">
+        <a href="#" class="logo">DEPORTES 360</a>
+        <nav class="navbar">
+            <ul>
+                <li><h:link outcome="/usuario" value="Inicio"/></li>
+                <li><h:link outcome="catalogo" value="Productos"/></li>
+                <li><h:link outcome="contacto1" value="Contacto"/></li>
+                <li><h:link outcome="carrito" value="Carrito (#{carritoBean.cantidadProductos})"/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <!-- MENSAJES -->
+    <h:messages styleClass="mensajes" globalOnly="true" 
+                infoClass="mensaje-info" 
+                warnClass="mensaje-warn" 
+                errorClass="mensaje-error"/>
+    
+    <div class="producto-detalle">
+        <!-- GALERÍA DE IMÁGENES -->
+        <div class="producto-galeria">
+            <div class="imagen-principal">
+                <h:graphicImage library="images" name="conjunto-mujer.png" 
+                                id="imagen-principal" 
+                                alt="Conjunto Deportivo Mujer"/>
+            </div>
+            <div class="miniaturas">
+                <h:graphicImage library="images" name="conjunto-mujer.png" 
+                                onclick="cambiarImagen('#{resource['images/conjunto-mujer.png']}')" 
+                                alt="Vista 1"/>
+                <h:graphicImage library="images" name="conjunto-mujer2.png" 
+                                onclick="cambiarImagen('#{resource['images/conjunto-mujer2.png']}')" 
+                                alt="Vista 2"/>
+                <h:graphicImage library="images" name="conjunto-mujer3.png" 
+                                onclick="cambiarImagen('#{resource['images/conjunto-mujer3.png']}')" 
+                                alt="Vista 3"/>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL PRODUCTO -->
+        <div class="producto-info">
+            <h2>Conjunto Deportivo Mujer</h2>
+            <p>
+                Conjunto de dos piezas ideal para entrenamientos o uso diario. 
+                Tejido elástico, cómodo y transpirable que se ajusta perfectamente al cuerpo.
+            </p>
+            <p><strong>Precio:</strong> $149.000</p>
+
+            <ul class="caracteristicas">
+                <li>🧵 Composición: 80% poliéster, 20% elastano</li>
+                <li>👚 Incluye top y leggings</li>
+                <li>📏 Tallas: S, M, L</li>
+                <li>🎨 Colores: negro, gris, lavanda</li>
+                <li>🛡️ Garantía: 30 días por defectos</li>
+            </ul>
+
+            <div class="benefits-mini">
+                <span>🚚 Envío gratis</span>
+                <span>💳 Pago contra entrega</span>
+                <span>🛡️ Garantía oficial</span>
+            </div>
+
+            <!-- FORMULARIO DE COMPRA -->
+            <h:form id="formCompra">
+                <div style="margin: 10px 0;">
+                    <label for="talla"><strong>Selecciona tu talla:</strong></label>
+                    <h:selectOneMenu id="talla" 
+                                     value="#{carritoBean.tallaSeleccionada}" 
+                                     styleClass="select-talla"
+                                     style="display: block; margin: 10px 0; padding: 10px; font-size: 16px; border-radius: 10px; border: 2px solid #ddd; width: 100%;">
+                        <f:selectItem itemValue="" itemLabel="-- Selecciona --" />
+                        <f:selectItem itemValue="S" itemLabel="S" />
+                        <f:selectItem itemValue="M" itemLabel="M" />
+                        <f:selectItem itemValue="L" itemLabel="L" />
+                        <f:selectItem itemValue="XL" itemLabel="XL" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div style="margin: 10px 0;">
+                    <strong>Calificación:</strong><br />
+                    <h:graphicImage library="images" name="estrellas5.png" 
+                                    alt="5 estrellas" 
+                                    style="width: 120px;" />
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h:link outcome="catalogo" value="Volver" styleClass="btn-1"/>
+                    <h:commandButton value="Comprar"
+                                     styleClass="btn-1"
+                                     style="margin-left: 10px;"
+                                     action="#{carritoBean.agregarProducto('Conjunto Deportivo Mujer', 149000, 'conjunto-mujer.png')}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
+    <section class="relacionados">
+        <h3>También te puede interesar</h3>
+        <div class="relacionados-grid">
+            <div class="relacionado">
+                <h:graphicImage library="images" name="leggings.png" alt="Leggings Deportivos Mujer"/>
+                <p>Leggings Deportivos Mujer</p>
+                <span>$85.000</span>
+            </div>
+            <div class="relacionado">
+                <h:graphicImage library="images" name="top.png" alt="Top Deportivo Mujer"/>
+                <p>Top Deportivo Mujer</p>
+                <span>$60.000</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- JAVASCRIPT -->
+<script type="text/javascript">
+    function cambiarImagen(url) {
+        var img = document.getElementById("imagen-principal");
+        if (img) {
+            img.src = url;
+        }
+    }
+</script>
+</h:body>
+</html>

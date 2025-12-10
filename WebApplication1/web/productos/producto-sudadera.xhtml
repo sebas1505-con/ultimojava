@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sudadera Clasica Unisex - Deportes 360</title>
+    <link rel="icon" type="image/x-icon" href="resources/images/producto.png"/>
+    <h:outputStylesheet library="css" name="catalogo.css"/>
+    <h:outputStylesheet library="css" name="index.css"/>
+</h:head>
+<h:body>
+<header class="header">
+    <div class="container menu">
+        <a href="#" class="logo">DEPORTES 360</a>
+        <nav class="navbar">
+            <ul>
+                <li><h:link outcome="/usuario" value="Inicio"/></li>
+                <li><h:link outcome="catalogo" value="Productos"/></li>
+                <li><h:link outcome="contacto1" value="Contacto"/></li>
+                <li><h:link outcome="carrito" value="Carrito (#{carritoBean.cantidadProductos})"/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <!-- MENSAJES -->
+    <h:messages styleClass="mensajes" globalOnly="true" 
+                infoClass="mensaje-info" 
+                warnClass="mensaje-warn" 
+                errorClass="mensaje-error"/>
+    
+    <div class="producto-detalle">
+        <!-- GALERIA DE IMAGENES -->
+        <div class="producto-galeria">
+            <div class="imagen-principal">
+                <h:graphicImage library="images" name="sudadera.png" 
+                                id="imagen-principal" 
+                                alt="Sudadera Clasica Unisex"/>
+            </div>
+            <div class="miniaturas">
+                <h:graphicImage library="images" name="sudadera.png" 
+                                onclick="cambiarImagen('#{resource['images/sudadera.png']}')" 
+                                alt="Vista 1"/>
+                <h:graphicImage library="images" name="sudadera2.png" 
+                                onclick="cambiarImagen('#{resource['images/sudadera2.png']}')" 
+                                alt="Vista 2"/>
+                <h:graphicImage library="images" name="sudadera3.png" 
+                                onclick="cambiarImagen('#{resource['images/sudadera3.png']}')" 
+                                alt="Vista 3"/>
+            </div>
+        </div>
+
+        <!-- INFORMACION DEL PRODUCTO -->
+        <div class="producto-info">
+            <h2>Sudadera Clasica Unisex</h2>
+            <p>
+                Perfecta para el entrenamiento o uso casual. Suave al tacto, termica, 
+                con diseño versatil para hombres y mujeres.
+            </p>
+            <p><strong>Precio:</strong> $120.000</p>
+
+            <ul class="caracteristicas">
+                <li>Material: algodon + poliester</li>
+                <li>Interior afelpado</li>
+                <li>Tallas: S, M, L, XL</li>
+                <li>Colores disponibles: gris, negro, azul</li>
+                <li>Garantia: 30 dias por defectos de fabrica</li>
+            </ul>
+
+            <div class="benefits-mini">
+                <span>Envio gratis</span>
+                <span>Pago contra entrega</span>
+                <span>Garantia oficial</span>
+            </div>
+
+            
+            <h:form id="formCompra">
+                <div style="margin: 10px 0;">
+                    <label for="talla"><strong>Selecciona tu talla:</strong></label>
+                    <h:selectOneMenu id="talla" 
+                                     value="#{carritoBean.tallaSeleccionada}" 
+                                     styleClass="select-talla"
+                                     style="display: block; margin: 10px 0; padding: 10px; font-size: 16px; border-radius: 10px; border: 2px solid #ddd; width: 100%;">
+                        <f:selectItem itemValue="" itemLabel="-- Selecciona --" />
+                        <f:selectItem itemValue="S" itemLabel="S" />
+                        <f:selectItem itemValue="M" itemLabel="M" />
+                        <f:selectItem itemValue="L" itemLabel="L" />
+                        <f:selectItem itemValue="XL" itemLabel="XL" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div style="margin: 10px 0;">
+                    <strong>Calificacion:</strong><br />
+                    <h:graphicImage library="images" name="estrellas5.png" 
+                                    alt="5 estrellas" 
+                                    style="width: 120px;" />
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h:link outcome="catalogo" value="Volver" styleClass="btn-1"/>
+                    <h:commandButton value="Comprar"
+                                     styleClass="btn-1"
+                                     style="margin-left: 10px;"
+                                     action="#{carritoBean.agregarProducto('Sudadera Clasica Unisex', 120000, 'sudadera.png')}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
+    <section class="relacionados">
+        <h3>También te puede interesar</h3>
+        <div class="relacionados-grid">
+            <div class="relacionado">
+                <h:link outcome="producto-chaqueta">
+                    <h:graphicImage library="images" name="chaqueta.png" alt="Chaqueta Rompevientos"/>
+                </h:link>
+                <p>Chaqueta Rompevientos</p>
+                <span>$135.000</span>
+            </div>
+            <div class="relacionado">
+                <h:link outcome="producto-leggings">
+                    <h:graphicImage library="images" name="leggings.png" alt="Leggings Mujer"/>
+                </h:link>
+                <p>Leggings Deportivos Mujer</p>
+                <span>$85.000</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script type="text/javascript">
+    function cambiarImagen(url) {
+        var img = document.getElementById("imagen-principal");
+        if (img) {
+            img.src = url;
+        }
+    }
+</script>
+</h:body>
+</html>

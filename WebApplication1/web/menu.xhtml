@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Menú de Roles — Deportes 360</title>
+    <h:outputStylesheet library="css" name="menu.css"/>
+</h:head>
+
+<h:body>
+
+    <header class="encabezado">
+        <h1>Bienvenido a Deportes 360</h1>
+    </header>
+
+    <main class="roles">
+
+        <!-- Cliente -->
+        <a href="registro.xhtml" class="cuadro rol-cliente">
+            <h:graphicImage value="/resources/images/cliente.png" styleClass="cuadro-img" />
+            <span class="cuadro-titulo">Cliente</span>
+            <p>
+                Regístrate como cliente para comprar productos, disfrutar de promociones
+                y vivir la experiencia deportiva completa.
+            </p>
+        </a>
+
+        <!-- Repartidor -->
+        <a href="crear-repartidor.xhtml" class="cuadro rol-repartidor">
+            <h:graphicImage value="/resources/images/repartidor.png" styleClass="cuadro-img" />
+            <span class="cuadro-titulo">Repartidor</span>
+            <p>
+                Únete como repartidor para trabajar con nosotros y llevar la pasión por
+                el deporte a cada rincón de Colombia.
+            </p>
+        </a>
+
+    </main>
+
+    <a href="index.xhtml" class="btn-volver-home">Volver</a>
+
+</h:body>
+</html>
+
+

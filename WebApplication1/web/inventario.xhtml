@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Inventario - Deportes 360</title>
+
+    <h:outputStylesheet library="css" name="admin.css" />
+    <h:outputStylesheet library="css" name="inventario.css" />
+
+    <link rel="icon" type="image/png" href="#{resource['images/inventario.png']}" />
+</h:head>
+
+<h:body>
+
+<header>
+    <h1>Gestión de Inventario - Deportes 360</h1>
+</header>
+
+<main>
+
+    <!-- FORMULARIO -->
+    <section class="form-section">
+        <h:inputText id="nombre" value="#{inventarioBean.nombre}" required="true">
+    <f:passThroughAttribute name="placeholder" value="Nombre del producto"/>
+</h:inputText>
+
+<h:inputText id="cantidad" value="#{inventarioBean.cantidad}" required="true">
+    <f:passThroughAttribute name="placeholder" value="Cantidad"/>
+</h:inputText>
+
+<h:inputText id="precio" value="#{inventarioBean.precio}" required="true">
+    <f:passThroughAttribute name="placeholder" value="Precio ($)"/>
+</h:inputText>
+
+    </section>
+
+
+    <section class="tabla-section">
+        <h:dataTable value="#{inventarioBean.listaProductos}" var="prod" 
+                     styleClass="tabla-inventario" border="1">
+
+            <h:column>
+                <f:facet name="header">Producto</f:facet>
+                #{prod.nombre}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Cantidad</f:facet>
+                #{prod.cantidad}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Precio</f:facet>
+                $#{prod.precio}
+            </h:column>
+
+        </h:dataTable>
+    </section>
+
+    <div style="text-align:center; margin-top: 30px;">
+        <a href="admin.xhtml" class="btn-regresar">← Volver al Panel de Administración</a>
+    </div>
+
+</main>
+
+</h:body>
+</html>

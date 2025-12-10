@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="#{resource['images/usu.png']}" />
+    <h:outputStylesheet library="css" name="index.css" />
+    <title>Deportes 360</title>
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{loginBean.verifSesionUsuario}" />
+
+    <header class="header">
+        <div class="container">
+            <div class="menu">
+
+                <img class="logo"
+                     src="#{resource['images/logo-deporte.png']}"
+                     alt="Logo Deportes 360" />
+
+                <input type="checkbox" id="menu" />
+                <label for="menu">
+                    <img class="menu-icono"
+                         src="#{resource['images/logo-deporte.png']}"
+                         alt="Menú" />
+                </label>
+
+                <nav class="navbar">
+                    <ul>
+                        <li><h:link outcome="/productos/catalogo" value="catalogo" /></li>
+                        <li><h:link outcome="/productos/contacto1" value="contacto" /></li>
+                        <li><h:link outcome="/productos/carrito" value="carrito" /></li>
+                        <li><h:link outcome="sugerencias" value="sugerencias" /></li>
+                        <li><h:link outcome="login" value="Cerrar Sesión" /></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="container hero-content">
+
+            <div class="hero-text">
+                <h1>CELEBRA CADA MOVIMIENTO</h1>
+                <p>TECNOLOGÍA, COMODIDAD Y ESTILO PARA CADA DÍA.</p>
+                <h:link outcome="/productos/catalogo" value="Catalogo" styleClass="btn-2" />
+            </div>
+
+            <div class="hero-image">
+                <img src="#{resource['images/atleta-hero.png']}" alt="Atleta saltando" />
+            </div>
+
+        </div>
+    </div>
+
+    <section class="services">
+        <div class="container">
+            <h2>Nuestros Servicios</h2>
+
+            <div class="services-content">
+
+                <div class="services-1">
+                    <h3>Envíos a todo el país</h3>
+                    <p>Recibe tus prendas deportivas estés donde estés, de forma rápida y segura.</p>
+                </div>
+
+                <div class="services-1">
+                    <h3>Cambios sin complicaciones</h3>
+                    <p>¿No te quedó bien? Te cambiamos la talla o prenda sin problemas.</p>
+                </div>
+
+                <div class="services-1">
+                    <h3>Pagos 100% seguros</h3>
+                    <p>Compra con tranquilidad usando nuestras plataformas protegidas.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <main class="Prodcts container">
+        <h2>Prendas Destacadas</h2>
+
+        <div class="Prodcts-content">
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/camiseta.png']}" alt="Camiseta DryFit" />
+                <h4>Camiseta DryFit Deportiva</h4>
+                <p>$59.900</p>
+                <h:link outcome="/productos/producto-camiseta" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/sudadera.png']}" alt="Sudadera Unisex" />
+                <h4>Sudadera Clásica Unisex</h4>
+                <p>$120.000</p>
+                <h:link outcome="/productos/producto-sudadera" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/leggings.png']}" alt="Leggings Mujer" />
+                <h4>Leggings Deportivos Mujer</h4>
+                <p>$85.000</p>
+                <h:link outcome="/productos/producto-leggings" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/chaqueta.png']}" alt="Chaqueta Rompevientos" />
+                <h4>Chaqueta Rompevientos</h4>
+                <p>$135.000</p>
+                <h:link outcome="/productos/producto-chaqueta" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/short.png']}" alt="Short Hombre" />
+                <h4>Short Deportivo Hombre</h4>
+                <p>$49.000</p>
+                <h:link outcome="/productos/producto-short" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/top.png']}" alt="Top Mujer" />
+                <h4>Top Deportivo Mujer</h4>
+                <p>$60.000</p>
+                <h:link outcome="/productos/producto-top" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/conjunto-mujer.png']}" alt="Conjunto Deportivo Mujer" />
+                <h4>Conjunto Deportivo Mujer</h4>
+                <p>$149.000</p>
+                <h:link outcome="/productos/producto-conjunto" value="Más Información" styleClass="btn-1" />
+            </div>
+
+            <div class="Prodcts-1">
+                <img src="#{resource['images/buzo-hombre.png']}" alt="Buzo Hombre" />
+                <h4>Buzo Deportivo Hombre</h4>
+                <p>$110.000</p>
+                <h:link outcome="/productos/producto-buzo.xhtml" value="Más Información" styleClass="btn-1" />
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer container">
+        <div class="footer-content">
+            <h:link outcome="index" value="Deportes 360" styleClass="logo" />
+
+            <ul>
+                <li><h:link outcome="usuario.xhtml" value="Inicio" /></li>
+                <li><h:link outcome="/productos/catalogo" value="Catálogo" /></li>
+                <li><h:link outcome="/errors/505.xhtml" value="Ayuda con tallas" /></li>
+            </ul>
+        </div>
+    </footer>
+
+</h:body>
+</html>

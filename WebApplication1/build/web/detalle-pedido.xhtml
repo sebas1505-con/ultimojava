@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Detalle del Pedido</title>
+    <h:outputStylesheet library="css" name="detalle-pedido.css"/>
+</h:head>
+<h:body>
+
+    <header class="top-bar">
+        <h:link outcome="usuario" styleClass="btn-top">⬅ Volver</h:link>
+
+        <h2 class="titulo-pagina">Detalle del Pedido</h2>
+
+        <h:link outcome="carrito" styleClass="btn-top carrito">
+            🛒 Carrito
+        </h:link>
+    </header>
+
+    <div class="detalle-wrapper">
+
+        <div class="detalle-container">
+            <h2>Pedido #<h:outputText value="#{pedidoBean.idVenta}" /></h2>
+
+            <div class="info-grid">
+                <div class="card">
+                    <div class="row">
+                        <strong>Total:</strong>
+                        <span class="value">
+                            <h:outputText value="#{pedidoBean.total}" />
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <strong>Método de pago:</strong>
+                        <span class="value">
+                            <h:outputText value="#{pedidoBean.metodoPago}" />
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <strong>Fecha:</strong>
+                        <span class="value">
+                            <h:outputText value="#{pedidoBean.fecha}" />
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <strong>Estado envío:</strong>
+                        <span class="estado-badge estado-pendiente">
+                            <h:outputText value="#{pedidoBean.estadoEnvio}" />
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="repartidor-card">
+                    <img src="#{resource['images/repartidor.png']}" alt="Repartidor" />
+
+                    <h4><h:outputText value="#{pedidoBean.nombreRepartidor}" /></h4>
+                    <p>Vehículo: <h:outputText value="#{pedidoBean.tipoVehiculo}" /></p>
+                    <p>Placa: <h:outputText value="#{pedidoBean.placa}" /></p>
+                </div>
+            </div>
+
+            <h:link outcome="index" styleClass="btn-2">
+                Volver al inicio
+            </h:link>
+        </div>
+    </div>
+</h:body>
+</html>

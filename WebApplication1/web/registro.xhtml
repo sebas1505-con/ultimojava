@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registro de Cliente</title>
+    <h:outputStylesheet name="alerts.css" library="css" />
+    <h:outputStylesheet name="registro.css" library="css" />
+</h:head>
+
+<h:body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Registro de Cliente</h2>
+        </div>
+
+        <!-- Mensajes globales -->
+        <p:growl id="msgs" showDetail="true" life="3000" />
+
+        <h:form styleClass="login-form">
+
+            <p:panelGrid columns="2" columnClasses="label,value" style="width:100%">
+
+                <h:outputLabel for="nombre" value="Nombre Completo:" />
+                <p:inputText id="nombre" value="#{registroBean.nombre}" required="true" />
+
+                <h:outputLabel for="correo" value="Correo Electrónico:" />
+                <p:inputText id="correo" value="#{registroBean.usuCorreo}" required="true" />
+
+                <h:outputLabel for="usuario" value="Usuario:" />
+                <p:inputText id="usuario" value="#{registroBean.usuario}" required="true" />
+
+                <h:outputLabel for="contrasena" value="Contraseña:" />
+                <p:password id="contrasena" value="#{registroBean.clave}" required="true" feedback="true" />
+
+                <h:outputLabel for="confirmar" value="Confirmar Contraseña:" />
+                <p:password id="confirmar" value="#{registroBean.confirmar}" required="true" />
+
+                <h:outputLabel for="telefono" value="Teléfono:" />
+                <p:inputMask id="telefono" value="#{registroBean.usutelefono}" mask="999-999-9999" />
+
+                <h:outputLabel for="direccion" value="Dirección:" />
+                <p:inputText id="direccion" value="#{registroBean.direccion}" />
+
+                <h:outputLabel for="fecha" value="Fecha de nacimiento:" />
+                <p:calendar id="fecha" value="#{registroBean.fechaNacimiento}" 
+                            pattern="dd-MM-yyyy" showButtonPanel="true" />
+
+                <h:outputLabel for="barrio" value="Barrio:" />
+                <p:inputText id="barrio" value="#{registroBean.barrio}" />
+
+            </p:panelGrid>
+
+            <p:commandButton value="Registrarse"
+                             action="#{registroBean.registrar}"
+                             ajax="false"
+                             styleClass="btn-login"
+                             update="msgs" />
+
+        </h:form>
+    </div>
+
+    <a href="menu.xhtml" class="btn-volver-home">Volver</a>
+</h:body>
+</html>

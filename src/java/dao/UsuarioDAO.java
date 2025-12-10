@@ -1,50 +1,27 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 import modelo.Usuario;
 
 public class UsuarioDAO {
 
     private Connection con;
 
-    public UsuarioDAO() throws Exception {
-        con = Conexion.conectar();
-    }
-
-    // ------------------ REGISTRAR ------------------
-    public boolean registrar(Usuario u) {
+    public UsuarioDAO() {
         try {
-            PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO usuario(nombre, usuCorreo, usuario, clave, usutelefono, direccion, fechaNacimiento, barrio, rol) VALUES(?,?,?,?,?,?,?,?,?)"
-            );
-            ps.setString(1, u.getNombre());
-            ps.setString(2, u.getUsuCorreo());
-            ps.setString(3, u.getUsuario());
-            ps.setString(4, u.getClave());
-            ps.setString(5, u.getUsuTelefono());
-            ps.setString(6, u.getDireccion());
-            ps.setDate(7, new java.sql.Date(u.getFechaNacimiento().getTime())); // ✅ ahora es Date
-            ps.setString(8, u.getBarrio());
-            ps.setString(9, u.getRol());
-            ps.executeUpdate();
-            return true;
+            con = Conexion.conectar();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
     }
 
-    // ------------------ LISTAR ------------------
-    public List<Usuario> listar() {
-        List<Usuario> lista = new ArrayList<>();
+    // Buscar usuario por correo
+    public Usuario buscarPorCorreo(String correo) {
         try {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario WHERE usuCorreo=?");
+            ps.setString(1, correo);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 Usuario u = new Usuario();
                 u.setId(rs.getInt("pk_idusuario"));
                 u.setNombre(rs.getString("nombre"));
@@ -53,119 +30,62 @@ public class UsuarioDAO {
                 u.setClave(rs.getString("clave"));
                 u.setUsuTelefono(rs.getString("usutelefono"));
                 u.setDireccion(rs.getString("direccion"));
-                u.setFechaNacimiento(rs.getDate("fechaNacimiento")); // ✅ recupera como Date
+                u.setFechaNacimiento(rs.getDate("fechaNacimiento"));
                 u.setBarrio(rs.getString("barrio"));
                 u.setRol(rs.getString("rol"));
-                lista.add(u);
+                u.setResetToken(rs.getString("reset_token"));
+                u.setTokenExpiracion(rs.getTimestamp("token_expiracion"));
+                return u;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return lista;
+        return null;
     }
 
-    // ------------------ ACTUALIZAR ------------------
-    public boolean actualizar(Usuario u) {
+    // Guardar token y expiración
+    public boolean guardarToken(int id, String token, Timestamp expiracion) {
         try {
             PreparedStatement ps = con.prepareStatement(
-                "UPDATE usuario SET nombre=?, usuCorreo=?, usuario=?, clave=?, usutelefono=?, direccion=?, fechaNacimiento=?, barrio=?, rol=? WHERE pk_idusuario=?"
+                "UPDATE usuario SET reset_token=?, token_expiracion=? WHERE pk_idusuario=?"
             );
-            ps.setString(1, u.getNombre());
-            ps.setString(2, u.getUsuCorreo());
-            ps.setString(3, u.getUsuario());
-            ps.setString(4, u.getClave());
-            ps.setString(5, u.getUsuTelefono());
-            ps.setString(6, u.getDireccion());
-            ps.setDate(7, new java.sql.Date(u.getFechaNacimiento().getTime())); // ✅
-            ps.setString(8, u.getBarrio());
-            ps.setString(9, u.getRol());
-            ps.setInt(10, u.getId());
-            ps.executeUpdate();
-            return true;
+            ps.setString(1, token);
+            ps.setTimestamp(2, expiracion);
+            ps.setInt(3, id);
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // ------------------ ELIMINAR ------------------
-    public boolean eliminar(int id) {
+    // Actualizar contraseña por token
+    public boolean actualizarContrasenaPorToken(String token, String nuevaClave) {
         try {
-            PreparedStatement ps = con.prepareStatement("DELETE FROM usuario WHERE pk_idusuario=?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            return true;
+            PreparedStatement ps = con.prepareStatement(
+                "UPDATE usuario SET clave=?, reset_token=NULL, token_expiracion=NULL WHERE reset_token=? AND token_expiracion > NOW()"
+            );
+            ps.setString(1, nuevaClave);
+            ps.setString(2, token);
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+    
+    private String resetToken;
+private Timestamp tokenExpiracion;
 
-    // ------------------ LOGIN ------------------
-    public Usuario login(String correo, String clave) {
-        Usuario u = null;
-        try {
-            PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM usuario WHERE usuCorreo=? AND clave=?"
-            );
-            ps.setString(1, correo);
-            ps.setString(2, clave);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                u = new Usuario();
-                u.setId(rs.getInt("pk_idusuario"));
-                u.setNombre(rs.getString("nombre"));
-                u.setUsuCorreo(rs.getString("usuCorreo"));
-                u.setUsuario(rs.getString("usuario"));
-                u.setClave(rs.getString("clave"));
-                u.setUsuTelefono(rs.getString("usutelefono"));
-                u.setDireccion(rs.getString("direccion"));
-                u.setFechaNacimiento(rs.getDate("fechaNacimiento")); // ✅ recupera como Date
-                u.setBarrio(rs.getString("barrio"));
-                u.setRol(rs.getString("rol"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return u;
-    }
+// Getters y setters
+public String getResetToken() { return resetToken; }
+public void setResetToken(String resetToken) { this.resetToken = resetToken; }
 
-public List<Usuario> listarUsuarios() {
-    List<Usuario> lista = new ArrayList<>();
-    try {
-        PreparedStatement ps = con.prepareStatement("SELECT * FROM usuario");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Usuario u = new Usuario();
-            u.setId(rs.getInt("pk_idusuario"));
-            u.setNombre(rs.getString("nombre"));
-            u.setUsuCorreo(rs.getString("usuCorreo"));
-            u.setUsuario(rs.getString("usuario"));
-            u.setClave(rs.getString("clave"));
-            u.setUsuTelefono(rs.getString("usutelefono"));
-            u.setDireccion(rs.getString("direccion"));
-            u.setFechaNacimiento(rs.getDate("fechaNacimiento"));
-            u.setBarrio(rs.getString("barrio"));
-            u.setRol(rs.getString("rol"));
-            lista.add(u);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return lista;
+public Timestamp getTokenExpiracion() { return tokenExpiracion; }
+public void setTokenExpiracion(Timestamp tokenExpiracion) { this.tokenExpiracion = tokenExpiracion; }
+
+    
 }
 
-    public int obtenerUltimoId() {
-    try {
-        PreparedStatement ps = con.prepareStatement("SELECT MAX(pk_idusuario) FROM usuario");
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return 0;
-}
 
-}
+

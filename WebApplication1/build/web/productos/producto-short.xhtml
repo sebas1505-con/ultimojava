@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Short Deportivo Hombre - Deportes 360</title>
+    <link rel="icon" type="image/x-icon" href="resources/images/producto.png"/>
+    <h:outputStylesheet library="css" name="catalogo.css"/>
+    <h:outputStylesheet library="css" name="index.css"/>
+</h:head>
+<h:body>
+<header class="header">
+    <div class="container menu">
+        <a href="#" class="logo">DEPORTES 360</a>
+        <nav class="navbar">
+            <ul>
+                <li><h:link outcome="/usuario" value="Inicio"/></li>
+                <li><h:link outcome="catalogo" value="Productos"/></li>
+                <li><h:link outcome="contacto1" value="Contacto"/></li>
+                <li><h:link outcome="carrito" value="Carrito (#{carritoBean.cantidadProductos})"/></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <!-- MENSAJES -->
+    <h:messages styleClass="mensajes" globalOnly="true" 
+                infoClass="mensaje-info" 
+                warnClass="mensaje-warn" 
+                errorClass="mensaje-error"/>
+    
+    <div class="producto-detalle">
+        <!-- GALERIA DE IMAGENES -->
+        <div class="producto-galeria">
+            <div class="imagen-principal">
+                <h:graphicImage library="images" name="short.png" 
+                                id="imagen-principal" 
+                                alt="Short Deportivo Hombre"/>
+            </div>
+            <div class="miniaturas">
+                <h:graphicImage library="images" name="short.png" 
+                                onclick="cambiarImagen('#{resource['images/short.png']}')" 
+                                alt="Vista 1"/>
+                <h:graphicImage library="images" name="short2.png" 
+                                onclick="cambiarImagen('#{resource['images/short2.png']}')" 
+                                alt="Vista 2"/>
+                <h:graphicImage library="images" name="short3.png" 
+                                onclick="cambiarImagen('#{resource['images/short3.png']}')" 
+                                alt="Vista 3"/>
+            </div>
+        </div>
+
+        <!-- INFORMACION DEL PRODUCTO -->
+        <div class="producto-info">
+            <h2>Short Deportivo Hombre</h2>
+            <p>
+                Ligero, comodo y transpirable. Ideal para correr, entrenar o usar a diario. 
+                Cuenta con bolsillos y cinturilla ajustable.
+            </p>
+            <p><strong>Precio:</strong> $49.000</p>
+
+            <ul class="caracteristicas">
+                <li>Tela liviana y de secado rapido</li>
+                <li>Con bolsillos laterales y pretina elastica</li>
+                <li>Tallas: S, M, L, XL</li>
+                <li>Colores: negro, azul, gris</li>
+                <li>Garantia: 30 dias por defectos</li>
+            </ul>
+
+            <div class="benefits-mini">
+                <span>Envio gratis</span>
+                <span>Pago contra entrega</span>
+                <span>Garantia oficial</span>
+            </div>
+
+            <!-- FORMULARIO DE COMPRA -->
+            <h:form id="formCompra">
+                <div style="margin: 10px 0;">
+                    <label for="talla"><strong>Selecciona tu talla:</strong></label>
+                    <h:selectOneMenu id="talla" 
+                                     value="#{carritoBean.tallaSeleccionada}" 
+                                     styleClass="select-talla"
+                                     style="display: block; margin: 10px 0; padding: 10px; font-size: 16px; border-radius: 10px; border: 2px solid #ddd; width: 100%;">
+                        <f:selectItem itemValue="" itemLabel="-- Selecciona --" />
+                        <f:selectItem itemValue="S" itemLabel="S" />
+                        <f:selectItem itemValue="M" itemLabel="M" />
+                        <f:selectItem itemValue="L" itemLabel="L" />
+                        <f:selectItem itemValue="XL" itemLabel="XL" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div style="margin: 10px 0;">
+                    <strong>Calificacion:</strong><br />
+                    <h:graphicImage library="images" name="estrellas5.png" 
+                                    alt="5 estrellas" 
+                                    style="width: 120px;" />
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h:link outcome="catalogo" value="Volver" styleClass="btn-1"/>
+                    <h:commandButton value="Comprar"
+                                     styleClass="btn-1"
+                                     style="margin-left: 10px;"
+                                     action="#{carritoBean.agregarProducto('Short Deportivo Hombre', 49000, 'short.png')}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
+    <section class="relacionados">
+        <h3>También te puede interesar</h3>
+        <div class="relacionados-grid">
+            <div class="relacionado">
+                <h:link outcome="producto-camiseta">
+                    <h:graphicImage library="images" name="camiseta.png" alt="Camiseta DryFit"/>
+                </h:link>
+                <p>Camiseta DryFit Deportiva</p>
+                <span>$59.900</span>
+            </div>
+            <div class="relacionado">
+                <h:link outcome="producto-buzo">
+                    <h:graphicImage library="images" name="buzo-hombre.png" alt="Buzo Deportivo Hombre"/>
+                </h:link>
+                <p>Buzo Deportivo Hombre</p>
+                <span>$110.000</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script type="text/javascript">
+    function cambiarImagen(url) {
+        var img = document.getElementById("imagen-principal");
+        if (img) {
+            img.src = url;
+        }
+    }
+</script>
+</h:body>
+</html>

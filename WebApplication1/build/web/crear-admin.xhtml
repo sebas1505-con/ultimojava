@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Formulario de Registro</title>
+    <h:outputStylesheet library="css" name="crear.admin.css"/>
+    <h:outputStylesheet library="css" name="alerts.css"/>
+
+</h:head>
+
+<h:body>
+    <h:panelGroup styleClass="login-container">
+        <div class="login-header">
+            <h2>Formulario de Registro</h2>
+            <!-- Imagen de cabecera -->
+            <h:graphicImage value="#{resource['images/logo-deporte.png']}" alt="Logo"/>
+        </div>
+
+        <h:form styleClass="login-form">
+            <!-- Mensajes de validación y éxito/error -->
+            <h:messages globalOnly="true" layout="table" style="color:red;" />
+
+            <!-- Usuario -->
+            <h:outputLabel for="usuario" value="Usuario"/>
+            <h:inputText id="usuario" value="#{adminBean.administrador.usuario}" 
+                         required="true" requiredMessage="El usuario es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="Crea tu usuario"/>
+            </h:inputText>
+
+            <!-- Correo -->
+            <h:outputLabel for="correo" value="Correo"/>
+            <h:inputText id="correo" value="#{adminBean.administrador.admCorreo}" 
+                         required="true" requiredMessage="El correo es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="ejemplo@correo.com"/>
+            </h:inputText>
+
+            <!-- Teléfono -->
+            <h:outputLabel for="telefono" value="Teléfono"/>
+            <h:inputText id="telefono" value="#{adminBean.administrador.telefono}" 
+                         required="true" requiredMessage="El teléfono es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="+57 300 000 0000"/>
+            </h:inputText>
+
+            <!-- Código -->
+            <h:outputLabel for="codigo" value="Código"/>
+            <h:inputText id="codigo" value="#{adminBean.administrador.codigo}" 
+                         required="true" requiredMessage="El código es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="ADM-000"/>
+            </h:inputText>
+
+            <!-- Contraseña -->
+            <h:outputLabel for="contrasena" value="Contraseña"/>
+            <h:inputSecret id="contrasena" value="#{adminBean.administrador.contraseña}" 
+                           required="true" requiredMessage="La contraseña es obligatoria">
+                <f:passThroughAttribute name="placeholder" value="Crea una contraseña"/>
+            </h:inputSecret>
+
+            <!-- Confirmar contraseña -->
+            <h:outputLabel for="confirmar" value="Confirmar Contraseña"/>
+            <h:inputSecret id="confirmar" value="#{adminBean.contrasenaConfirmacion}" 
+                           required="true" requiredMessage="Confirma la contraseña">
+                <f:passThroughAttribute name="placeholder" value="Repite tu contraseña"/>
+            </h:inputSecret>
+
+            <!-- Botón registrar -->
+            <h:commandButton value="Registrarse" action="#{adminBean.registrar}" styleClass="btn btn-success"/>
+
+        </h:form>
+
+        <!-- Volver al menú principal -->
+        <h:link outcome="/menu.xhtml" value="Volver" styleClass="btn-volver-home"/> 
+    </h:panelGroup>
+</h:body>
+</html>

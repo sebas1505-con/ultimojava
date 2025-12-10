@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Formulario de Registro Repartidor</title>
+    <h:outputStylesheet library="css" name="alerts.css"/>
+    <h:outputStylesheet library="css" name="crear.repartidor.css"/>
+</h:head>
+<h:body>
+    
+    <h:link outcome="/menu.xhtml" value="Volver" styleClass="btn-volver-home"/>
+
+    <h:panelGroup styleClass="login-container">
+        <div class="login-header">
+            <h:graphicImage value="#{resource['images/logo-deporte.png']}" alt="Logo" styleClass="logo"/>
+            <h2>Registro Repartidor</h2>
+        </div>
+
+        <h:form styleClass="login-form">
+            <!-- Nombre Completo -->
+            <h:outputLabel for="nombre" value="Nombre Completo"/>
+            <h:inputText id="nombre" value="#{repartidorBean.nombre}" required="true" requiredMessage="El nombre es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="Ingresa tu nombre completo"/>
+            </h:inputText>
+
+            <!-- Correo Electrónico -->
+            <h:outputLabel for="correo" value="Correo Electrónico"/>
+            <h:inputText id="correo" value="#{repartidorBean.correo}" required="true" requiredMessage="El correo es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="ejemplo@correo.com"/>
+            </h:inputText>
+
+            <!-- Usuario -->
+            <h:outputLabel for="usuario" value="Usuario"/>
+            <h:inputText id="usuario" value="#{repartidorBean.usuario}" required="true" requiredMessage="El usuario es obligatorio">
+                <f:passThroughAttribute name="placeholder" value="Crea tu usuario"/>
+            </h:inputText>
+
+            <!-- Contraseña -->
+            <h:outputLabel for="contrasena" value="Contraseña"/>
+            <h:inputSecret id="contrasena" value="#{repartidorBean.contrasena}" required="true" requiredMessage="La contraseña es obligatoria">
+                <f:passThroughAttribute name="placeholder" value="Crea una contraseña"/>
+            </h:inputSecret>
+
+            <!-- Confirmar Contraseña -->
+            <h:outputLabel for="contrasenaConfirmacion" value="Confirmar Contraseña"/>
+            <h:inputSecret id="contrasenaConfirmacion" value="#{repartidorBean.contrasenaConfirmacion}" required="true" requiredMessage="Confirma la contraseña">
+                <f:passThroughAttribute name="placeholder" value="Repite tu contraseña"/>
+            </h:inputSecret>
+
+            <!-- Placa -->
+            <h:outputLabel for="placa" value="Número de placa"/>
+            <h:inputText id="placa" value="#{repartidorBean.placa}" required="true" requiredMessage="La placa es obligatoria">
+                <f:passThroughAttribute name="placeholder" value="Ejemplo SFQ-072"/>
+            </h:inputText>
+
+            <!-- Teléfono -->
+            <h:outputLabel for="telefono" value="Teléfono"/>
+            <h:inputText id="telefono" value="#{repartidorBean.telefono}">
+                <f:passThroughAttribute name="placeholder" value="+57 300 000 0000"/>
+            </h:inputText>
+
+            <!-- Vehículo -->
+            <h:outputLabel for="vehiculo" value="Tipo de Vehículo"/>
+            <h:selectOneMenu id="vehiculo" value="#{repartidorBean.vehiculo}" required="true" requiredMessage="Selecciona un vehículo">
+                <f:selectItem itemLabel="-- Selecciona tu vehículo --" itemValue=""/>
+                <f:selectItem itemLabel="Moto" itemValue="moto"/>
+                <f:selectItem itemLabel="Carro" itemValue="carro"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel for="fecha" value="Fecha de nacimiento"/>
+            <h:inputText id="fecha" value="#{repartidorBean.fecha}">
+                <f:passThroughAttribute name="type" value="date"/>
+            </h:inputText>
+
+            <h:commandButton value="Registrarse" action="#{repartidorBean.registrar}" 
+                             onclick="alert('Creando su cuenta como Repartidor')"/>
+        </h:form>
+    </h:panelGroup>
+</h:body>
+</html>

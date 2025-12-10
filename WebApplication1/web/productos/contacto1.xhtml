@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Contacto - Deportes 360</title>
+
+    <!-- CSS desde resources/css -->
+    <h:outputStylesheet library="css" name="contacto.css"/>
+</h:head>
+
+<h:body>
+
+    <header class="header">
+        <div class="logo">
+            <h1>Deportes 360</h1>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><h:link value="Carrito" outcome="carrito"/></li>
+                <li><h:link value="catalogo" outcome="catalogo"/></li>
+                <li><h:link value="Volver" outcome="/usuario"/></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contacto">
+            <h2>Contáctanos</h2>
+
+            <p class="intro">
+                En <strong>Deportes 360</strong> queremos estar cerca de ti.  
+                Selecciona la opción que mejor se adapte a tu necesidad:
+            </p>
+
+            <!-- CARD 1 -->
+            <div class="card">
+                <h3>🛒 Ayuda en tu compra</h3>
+                <p>¿Tienes dudas antes de comprar? Nuestro equipo está listo para ayudarte.</p>
+                <p><strong>Teléfono:</strong> +57 320 000 1111</p>
+                <p><strong>Correo:</strong> ayuda@deportes.com</p>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="card">
+                <h3>📦 Problemas con tu pedido</h3>
+                <p>Si tu pedido presenta algún inconveniente, contáctanos para darte solución rápida.</p>
+                <p><strong>Teléfono:</strong> +57 321 222 3333</p>
+                <p><strong>Correo:</strong> pedidos@deportes.com</p>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="card">
+                <h3>🤝 ¿Quieres trabajar con nosotros?</h3>
+                <p>Vende tus productos en nuestra página y aumenta tus ventas llegando a más clientes.</p>
+                <p><strong>Teléfono:</strong> +57 322 444 5555</p>
+                <p><strong>Correo:</strong> alianzas@deportes.com</p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>2025 Deportes 360. Todos los derechos reservados.</p>
+    </footer>
+
+</h:body>
+</html>

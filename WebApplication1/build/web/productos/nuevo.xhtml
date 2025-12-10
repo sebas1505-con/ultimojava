@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Nuevo Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <h:outputStylesheet name="nuevo.css" library="css" />
+</h:head>
+
+<h:body>
+    <div class="container">
+        <h2 class="text-success">Nuevo Producto</h2>
+             <h:link outcome="/admin.xhtml" value="Volver" styleClass="btn-volver-home" />
+
+
+        <h:form enctype="multipart/form-data">
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="cod" value="Código:" />
+                <h:inputText id="cod" value="#{productoBean.producto.cod}" 
+                             required="true" requiredMessage="Debe especificar un Código"
+                             styleClass="form-control" />
+                <h:message for="cod" styleClass="text-danger" />
+
+                <h:outputLabel for="nom" value="Nombre:" />
+                <h:inputText id="nom" value="#{productoBean.producto.nombre}" 
+                             required="true" requiredMessage="Debe especificar un Nombre"
+                             styleClass="form-control" />
+                <h:message for="nom" styleClass="text-danger" />
+
+                <h:outputLabel for="des" value="Descripción:" />
+                <h:inputTextarea id="des" value="#{productoBean.producto.descr}" 
+                                 required="true" requiredMessage="Debe especificar una Descripción"
+                                 styleClass="form-control" />
+                <h:message for="des" styleClass="text-danger" />
+
+                <h:outputLabel for="ext" value="Existencias:" />
+                <h:inputText id="ext" value="#{productoBean.producto.exist}" 
+                             required="true" requiredMessage="Debe especificar una Cantidad"
+                             styleClass="form-control" />
+                <h:message for="ext" styleClass="text-danger" />
+
+                <h:outputLabel for="pre" value="Precio:" />
+                <h:inputText id="pre" value="#{productoBean.producto.precio}" 
+                             required="true" requiredMessage="Debe especificar un Precio"
+                             styleClass="form-control" />
+                <h:message for="pre" styleClass="text-danger" />
+
+                <h:outputLabel for="fev" value="Fecha Vence:" />
+                <h:inputText id="fev" value="#{productoBean.producto.fven}" 
+                             required="true" requiredMessage="Debe especificar una Fecha"
+                             styleClass="form-control">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:inputText>
+                <h:message for="fev" styleClass="text-danger" />
+
+                <h:outputLabel for="img" value="Imagen:" />
+                <h:inputFile id="img" value="#{productoBean.imagen}" 
+                             required="true" requiredMessage="Debe seleccionar una Imagen"
+                             styleClass="form-control" />
+                <h:message for="img" styleClass="text-danger" />
+
+                <h:column />
+                <h:column>
+                    <h:commandButton value="Guardar" actionListener="#{productoBean.guardar}" 
+                                     action="index" styleClass="btn btn-success" />
+                    <h:commandButton value="Cancelar" immediate="true" action="index" 
+                                     styleClass="btn btn-secondary" style="margin-left: 15px;" />
+                </h:column>
+                <h:column />
+
+            </h:panelGrid>
+        </h:form>
+        
+    </div>
+</h:body>
+</html>

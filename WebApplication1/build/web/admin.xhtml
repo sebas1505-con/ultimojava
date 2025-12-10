@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Panel de Administrador - Deportes 360</title>
+    <link rel="icon" type="image/x-icon" href="#{resource['images/admin.jpg']}"/>
+    <h:outputStylesheet library="css" name="admin.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{loginBean.verifSesionAdmin}" />
+
+<header class="header">
+    <h1>Panel de Administrador - Deportes 360</h1>
+</header>
+
+<nav class="sidebar">
+   <ul>
+    <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <li><h:link outcome="productos" value="Productos"/></li>
+    <li><h:link outcome="inventario" value="Inventario"/></li>
+    <li><h:link outcome="/productos/nuevo" value="Nuevo Producto"/></li>
+    <li><h:link outcome="/productos/editar" value="editar Producto"/></li>
+    <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <li><h:link outcome="login" value="Cerrar Sesión" /></li>
+</ul>
+
+</nav>
+
+<main class="dashboard">
+
+    <!-- ESTADÍSTICAS -->
+    <section class="stats">
+        <div class="stat-box">
+            <h3>Ventas Hoy</h3>
+            <p>$ #{adminBean.ventasHoy}</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Productos Vendidos</h3>
+            <p>#{adminBean.productosVendidosHoy}</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Clientes Nuevos</h3>
+            <p>#{adminBean.clientesNuevosHoy}</p>
+        </div>
+    </section>
+
+    <!-- GRÁFICA -->
+    <section class="grafico">
+        <h2>Ventas de la Semana</h2>
+        <div class="grafico-contenedor">
+            <canvas id="graficaVentas"></canvas>
+        </div>
+    </section>
+
+    <!-- ÚLTIMOS PEDIDOS -->
+    <section class="pedidos">
+        <h2>Últimos Pedidos</h2>
+        <table class="tabla-pedidos">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Producto</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ui:repeat value="#{adminBean.ultimosPedidos}" var="p">
+                    <tr>
+                        <td>#{p.id}</td>
+                        <td>#{p.cliente}</td>
+                        <td>#{p.producto}</td>
+                        <td>#{p.fecha}</td>
+                        <td>$ #{p.total}</td>
+                    </tr>
+                </ui:repeat>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- INVENTARIO VISUAL -->
+    <section class="inventario-visual">
+        <h2>Inventario de Productos</h2>
+        <div class="inventario-grid">
+            <ui:repeat value="#{adminBean.inventario}" var="i">
+                <div class="producto-card">
+                    <h:graphicImage library="images" name="#{i.imagen}" alt="img" />
+                    <h4>#{i.nombre}</h4>
+                    <p>Precio: $ #{i.precio}</p>
+                    <p>Stock: #{i.stock} unidades</p>
+                </div>
+            </ui:repeat>
+        </div>
+    </section>
+
+    <!-- USUARIOS -->
+    <section class="usuarios">
+        <h2>Gestión de Usuarios</h2>
+        <table class="tabla-usuarios">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ui:repeat value="#{adminBean.usuarios}" var="u">
+                    <tr>
+                        <td>#{u.id}</td>
+                        <td>#{u.nombre}</td>
+                        <td>#{u.correo}</td>
+                        <td>#{u.rol}</td>
+                    </tr>
+                </ui:repeat>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<!-- SCRIPT GRÁFICA -->
+<script>
+    const ctx = document.getElementById('graficaVentas').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+            datasets: [{
+                label: 'Ventas ($)',
+                data: #{adminBean.datosGraficaSemana},
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+</script>
+
+</h:body>
+</html>
+
