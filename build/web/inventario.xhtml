@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-    
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
 <h:head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Gestión de Inventario - Deportes 360</title>
 
-    <h:outputStylesheet library="css" name="admin.css" />
+    <!-- Tus CSS -->
+    <h:outputStylesheet library="css" name="admin-style.css" />
     <h:outputStylesheet library="css" name="inventario.css" />
 
-    <link rel="icon" type="image/png" href="#{resource['images/inventario.png']}" />
+    <link rel="icon" type="image/x-icon" href="#{resource['images/inventario.png']}" />
 </h:head>
 
 <h:body>
@@ -22,51 +23,105 @@
 </header>
 
 <main>
-
     <!-- FORMULARIO -->
     <section class="form-section">
-        <h:inputText id="nombre" value="#{inventarioBean.nombre}" required="true">
-    <f:passThroughAttribute name="placeholder" value="Nombre del producto"/>
-</h:inputText>
+        <h:form id="form-inventario" styleClass="formulario-inventario">
+            <h:inputText id="nombre" required="true">
+                <f:passThroughAttribute name="placeholder" value="Nombre del producto"/>
+            </h:inputText>
 
-<h:inputText id="cantidad" value="#{inventarioBean.cantidad}" required="true">
+            <h:inputText id="cantidad" required="true">
+    <f:convertNumber integerOnly="true" />
     <f:passThroughAttribute name="placeholder" value="Cantidad"/>
 </h:inputText>
 
-<h:inputText id="precio" value="#{inventarioBean.precio}" required="true">
+<h:inputText id="precio" required="true">
+    <f:convertNumber integerOnly="false" />
     <f:passThroughAttribute name="placeholder" value="Precio ($)"/>
 </h:inputText>
 
+
+            <h:commandButton value="Agregar al Inventario" type="button" onclick="agregarProducto();"/>
+        </h:form>
     </section>
 
-
+    <!-- TABLA -->
     <section class="tabla-section">
-        <h:dataTable value="#{inventarioBean.listaProductos}" var="prod" 
-                     styleClass="tabla-inventario" border="1">
-
-            <h:column>
-                <f:facet name="header">Producto</f:facet>
-                #{prod.nombre}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Cantidad</f:facet>
-                #{prod.cantidad}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Precio</f:facet>
-                $#{prod.precio}
-            </h:column>
-
-        </h:dataTable>
+        <table id="tabla-inventario">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Se llenará con JS -->
+            </tbody>
+        </table>
     </section>
 
+    <!-- BOTÓN VOLVER -->
     <div style="text-align:center; margin-top: 30px;">
-        <a href="admin.xhtml" class="btn-regresar">← Volver al Panel de Administración</a>
+        <h:outputLink value="admin.xhtml" styleClass="btn-regresar">← Volver al Panel de Administración</h:outputLink>
     </div>
-
 </main>
+
+<!-- SCRIPT -->
+<script type="text/javascript">
+    const tabla = document.querySelector('#tabla-inventario tbody');
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let inventario = JSON.parse(localStorage.getItem('inventario')) || [];
+
+        // Productos de ejemplo si el inventario está vacío
+        if (inventario.length === 0) {
+            inventario = [
+                { nombre: "Camiseta DryFit Deportiva", cantidad: 18, precio: 59900 },
+                { nombre: "Sudadera Clásica Unisex", cantidad: 10, precio: 95000 },
+                { nombre: "Leggings Deportivos Mujer", cantidad: 15, precio: 85000 },
+                { nombre: "Chaqueta Rompevientos", cantidad: 12, precio: 119000 },
+                { nombre: "Short Deportivo Hombre", cantidad: 20, precio: 48000 },
+                { nombre: "Top Deportivo Mujer", cantidad: 14, precio: 69000 },
+                { nombre: "Conjunto Deportivo Mujer", cantidad: 8, precio: 135000 },
+                { nombre: "Buzo Deportivo Hombre", cantidad: 9, precio: 110000 }
+            ];
+            localStorage.setItem('inventario', JSON.stringify(inventario));
+        }
+
+        mostrarProductos();
+    });
+
+    function agregarProducto() {
+        const nombre = document.getElementById('form-inventario:nombre').value.trim();
+        const cantidad = parseInt(document.getElementById('form-inventario:cantidad').value);
+        const precio = parseFloat(document.getElementById('form-inventario:precio').value);
+
+        if (!nombre || isNaN(cantidad) || isNaN(precio)) return;
+
+        const producto = { nombre, cantidad, precio };
+        let inventario = JSON.parse(localStorage.getItem('inventario')) || [];
+        inventario.push(producto);
+        localStorage.setItem('inventario', JSON.stringify(inventario));
+
+        mostrarProductos();
+        document.getElementById('form-inventario').reset();
+    }
+
+    function mostrarProductos() {
+        const inventario = JSON.parse(localStorage.getItem('inventario')) || [];
+        tabla.innerHTML = '';
+        inventario.forEach(prod => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${prod.nombre}</td>
+                <td>${prod.cantidad}</td>
+                <td>$${prod.precio.toLocaleString()}</td>
+            `;
+            tabla.appendChild(row);
+        });
+    }
+</script>
 
 </h:body>
 </html>

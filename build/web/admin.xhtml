@@ -107,18 +107,20 @@
         labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
         datasets: [{
           label: 'Ventas ($)',
-          data: #{adminBean.ventasSemanaJson},   // aquí se inyecta la lista desde el bean
-          backgroundColor: '#0288d1'
+          data: [75000, 610000, 58000, 50000, 360000, 350000, 210000],
+          backgroundColor: '#0288d1' // Azul deportivo
         }]
       },
       options: {
         responsive: true,
         scales: {
-          y: { beginAtZero: true }
+          y: {
+            beginAtZero: true
+          }
         }
       }
     });
-    </script>
+  </script>
 
     <!-- USUARIOS -->
     <section class="usuarios">
