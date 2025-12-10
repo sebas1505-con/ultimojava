@@ -130,23 +130,6 @@
     </section>
 
 </main>
-
-<!-- SCRIPT GRÁFICA -->
-<script>
-    const ctx = document.getElementById('graficaVentas').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
-            datasets: [{
-                label: 'Ventas ($)',
-                data: #{adminBean.datosGraficaSemana},
-            }]
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-    });
-</script>
-
 </h:body>
 </html>
 

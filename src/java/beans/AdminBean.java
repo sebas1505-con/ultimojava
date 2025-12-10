@@ -1,12 +1,16 @@
 package beans;
 
+import java.util.List;
+import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-
 import dao.AdministradorDAO;
+import modelo.Pedido;
+import modelo.Producto;
+import modelo.Usuario;
 import modelo.Administrador;
 
 @ManagedBean(name="adminBean")
@@ -90,4 +94,66 @@ public class AdminBean implements Serializable {
         administradorLogueado = null;
         return "/login.xhtml?faces-redirect=true";
     }
+    
+    private int ventasHoy;
+
+public int getVentasHoy() {
+    return ventasHoy;
 }
+
+public void setVentasHoy(int ventasHoy) {
+    this.ventasHoy = ventasHoy;
+}
+
+private int productosVendidosHoy;
+
+public int getProductosVendidosHoy() {
+    return productosVendidosHoy;
+}
+
+public void setProductosVendidosHoy(int productosVendidosHoy) {
+    this.productosVendidosHoy = productosVendidosHoy;
+}
+
+private int clientesNuevosHoy;
+
+public int getClientesNuevosHoy() {
+    return clientesNuevosHoy;
+}
+
+public void setClientesNuevosHoy(int clientesNuevosHoy) {
+    this.clientesNuevosHoy = clientesNuevosHoy;
+}
+
+private List<Pedido> ultimosPedidos;
+
+public List<Pedido> getUltimosPedidos() {
+    return ultimosPedidos;
+}
+
+public void setUltimosPedidos(List<Pedido> ultimosPedidos) {
+    this.ultimosPedidos = ultimosPedidos;
+}
+
+private List<Producto> inventario;
+
+public List<Producto> getInventario() {
+    return inventario;
+}
+
+public void setInventario(List<Producto> inventario) {
+    this.inventario = inventario;
+}
+
+private List<Usuario> usuarios;
+
+public List<Usuario> getUsuarios() {
+    return usuarios;
+}
+
+public void setUsuarios(List<Usuario> usuarios) {
+    this.usuarios = usuarios;
+}
+    
+}
+

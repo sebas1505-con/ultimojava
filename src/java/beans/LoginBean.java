@@ -41,9 +41,9 @@ public class LoginBean implements Serializable {
 
                 // Redirigir según rol
                 if ("admin".equalsIgnoreCase(usuarioLogueado.getRol())) {
-                    return "/administrador.xhtml?faces-redirect=true";
+                    return "/admin?faces-redirect=true";
                 } else {
-                    return "/usuario.xhtml?faces-redirect=true";
+                    return "/usuario?faces-redirect=true";
                 }
             }
 
