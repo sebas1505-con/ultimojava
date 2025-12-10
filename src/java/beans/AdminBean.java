@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import dao.AdministradorDAO;
 import dao.Conexion;
+import dao.PedidoDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,6 +46,8 @@ public class AdminBean implements Serializable {
         // Aquí también podrías inicializar inventario y pedidos si tienes DAOs
         System.out.println("Usuarios cargados: " + (usuarios != null ? usuarios.size() : 0));
     }
+    
+    
 
     // ================== GETTERS & SETTERS ==================
     public Administrador getAdministrador() { return administrador; }
@@ -216,6 +219,10 @@ private List<Integer> cargarVentasSemana() {
         e.printStackTrace();
     }
     return lista;
+}
+public void cargarPedidos() {
+    PedidoDAO dao = new PedidoDAO();
+    ultimosPedidos = dao.obtenerUltimosPedidos();
 }
 
 }

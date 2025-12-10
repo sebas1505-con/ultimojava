@@ -28,4 +28,12 @@ public class Producto {
 
     public Date getFven() { return fven; }
     public void setFven(Date fven) { this.fven = fven; }
+
+    public void setCantidad(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setId(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

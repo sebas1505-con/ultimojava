@@ -20,18 +20,22 @@
 <header class="header">
     <h1>Panel de Administrador - Deportes 360</h1>
 </header>
+    
 
 <nav class="sidebar">
    <ul>
     <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <h:commandButton value="Generar PDF" action="#{ventaBean.generarReportePDF}" />
     <li><h:link outcome="productos" value="Productos"/></li>
+    <li><h:link outcome="reportesVentas" value="Reportes"/></li>
     <li><h:link outcome="inventario" value="Inventario"/></li>
     <li><h:link outcome="/productos/nuevo" value="Nuevo Producto"/></li>
-    <li><h:link outcome="/productos/editar" value="editar Producto"/></li>
-    <li><h:link outcome="pedidos" value="Pedidos"/></li>
+    <li><h:link outcome="/productos/editar" value="Editar Producto"/></li>
+    <li><h:link outcome="pedidos" value="Productos Vendidos"/></li>
+    
+    
     <li><h:link outcome="login" value="Cerrar Sesión" /></li>
-</ul>
-
+   </ul>
 </nav>
 
 <main class="dashboard">
@@ -70,7 +74,7 @@
                 <tr>
                     <th>#</th>
                     <th>Cliente</th>
-                    <th>Producto</th>
+                    <th>Productos</th>
                     <th>Fecha</th>
                     <th>Total</th>
                 </tr>
@@ -79,8 +83,13 @@
                 <ui:repeat value="#{adminBean.ultimosPedidos}" var="p">
                     <tr>
                         <td>#{p.id}</td>
-                        <td>#{p.cliente}</td>
-                        <td>#{p.producto}</td>
+                        <td>#{p.cliente.nombre}</td>
+                        <td>
+                            <!-- 🔹 Mostrar todos los productos del pedido -->
+                            <ui:repeat value="#{p.productos}" var="prod">
+                                <span>#{prod.nombre} (#{prod.cantidad})</span><br/>
+                            </ui:repeat>
+                        </td>
                         <td>#{p.fecha}</td>
                         <td>$ #{p.total}</td>
                     </tr>
@@ -109,9 +118,8 @@
         }
       }
     });
-</script>
+    </script>
 
-  
     <!-- USUARIOS -->
     <section class="usuarios">
         <h2>Gestión de Usuarios</h2>
@@ -125,27 +133,25 @@
                 </tr>
             </thead>
             <tbody>
-    <ui:repeat value="#{adminBean.usuarios}" var="u">
-        <tr>
-            <td>#{u.id}</td>
-            <td>#{u.nombre}</td>
-            <td>#{u.usuCorreo}</td>
-            <td>#{u.rol}</td>
-            <td>
-                <h:form>
-                    <h:commandButton value="Eliminar"
-                                     action="#{adminBean.eliminarUsuario(u)}"
-                                     onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
-                </h:form>
-            </td>
-        </tr>
-    </ui:repeat>
-</tbody>
-
+                <ui:repeat value="#{adminBean.usuarios}" var="u">
+                    <tr>
+                        <td>#{u.id}</td>
+                        <td>#{u.nombre}</td>
+                        <td>#{u.usuCorreo}</td>
+                        <td>#{u.rol}</td>
+                        <td>
+                            <h:form>
+                                <h:commandButton value="Eliminar"
+                                                 action="#{adminBean.eliminarUsuario(u)}"
+                                                 onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
+                            </h:form>
+                        </td>
+                    </tr>
+                </ui:repeat>
+            </tbody>
         </table>
     </section>
 
 </main>
 </h:body>
 </html>
-

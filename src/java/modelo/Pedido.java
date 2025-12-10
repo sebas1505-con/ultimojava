@@ -1,23 +1,30 @@
 package modelo;
 
+import java.util.Date;
+import java.util.List;
+
 public class Pedido {
     private int id;
-    private String cliente;
-    private String producto;
-    private String fecha;
+    private Usuario cliente;
+    private Date fecha;
     private double total;
+    private List<Producto> productos; // 🔹 lista de productos
 
-    public Pedido(int id, String cliente, String producto, String fecha, double total) {
-        this.id = id;
-        this.cliente = cliente;
-        this.producto = producto;
-        this.fecha = fecha;
-        this.total = total;
-    }
-
+    // Getters y setters
     public int getId() { return id; }
-    public String getCliente() { return cliente; }
-    public String getProducto() { return producto; }
-    public String getFecha() { return fecha; }
+    public void setId(int id) { this.id = id; }
+
+    public Usuario getCliente() { return cliente; }
+    public void setCliente(Usuario cliente) { this.cliente = cliente; }
+
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
+
     public double getTotal() { return total; }
+    public void setTotal(double total) { this.total = total; }
+
+    public List<Producto> getProductos() { return productos; }
+    public void setProductos(List<Producto> productos) { this.productos = productos; }
 }
+
+
